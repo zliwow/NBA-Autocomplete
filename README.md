@@ -1,111 +1,116 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/UDc3mhmF)
+# NBA Autocomplete Project
 
-# OKC Technical Project Deliverable
+This project implements an autocomplete search engine for an internal web application used by an NBA team’s front office, scouts, and coaching staff. Users can search for players, and the system fetches relevant player details and visualizes their game performance. The project consists of a backend powered by Django and PostgreSQL and a frontend built using Angular. 
 
-### Internship Program Disclosures
+## Project Overview
 
-* You must be eligible to work in the United States to be able to qualify for this internship.
-  
-* The pay for this internship is the greater of your local minimum wage and $13/hour.
+The project’s key objective is to provide a fast, efficient, and scalable search solution for player and team lookups. The backend processes raw game, player, and team data, stores it in a PostgreSQL database, and exposes a REST API for the frontend to consume. The frontend handles user interactions, search input, and data visualization.
 
-* This application is for the purposes of an internship taking place in the Spring, Summer, or Fall of 2025.
+Key features:
+- **Autocomplete**: The search engine leverages an autocomplete feature, allowing users to start typing a name and see suggestions for matching players.
+- **Player Summary**: For each player, a detailed summary of their game statistics, including minutes played, points scored, assists, rebounds, and more, is displayed.
+- **Shot Visualization**: Shot data, including the location of each shot relative to the basket, is displayed graphically on a basketball court diagram, helping users analyze shot performance.
 
-### 1. Backend Engineering
+This system is designed to support up to 100 users concurrently and is optimized for speed and data accuracy.
 
-* Architect and implement a normalized PostgreSQL database to store the data provided in `backend/raw_data`. All information from the original data should be accessible via the database.
+## Project Structure
 
-* Write a brief description of your database architecture (<250 words). Feel free to provide a visual representation as an aide. Submit relevant responses in the `written_responses` folder provided.
-
-* In the programming language of your choice, write a process to load the dataset into your PostgreSQL database. Ensure that this process can run repeatedly without duplicating or obscuring references in the database. Include the source code of your process in the `backend/scripts` folder. Note: You can feel free to utilize the power of Django models and migrations to achieve this step.
-
-* After loading the data, export the state of your database using `pg_dump -U okcapplicant okc > dbexport.pgsql`. Include `dbexport.psql` in the `backend/scripts` folder.
-
-* The skeleton of an API View `PlayerSummary` can be found in `backend/app/views/players.py`. Implement this API to return a player summary that mimics the structure of `backend/app/views/sample_response/sample_response.json`. Feel free to import additional modules/libraries in order to do this, but ensure that the `backend/requirements.txt` is updated accordingly. Viewing http://localhost:4200/player-summary-api allows you to see the output of your API, given the playerID parameter provided in the user input.
-
-### 2. Frontend Engineering
-
-* The `player-summary` component, which is viewable at http://localhost:4200/player-summary, makes a call to an API endpoint at `/api/v1/playerSummary/{playerID}` that returns player summary data. One component of the player summary data are the player's shots in each game, note that:
-
-   * The shot's x and y coordinates are provided and are measured in feet
-   * The location of each shot is relative to the center of the basket, per `court_diagram.jpg` in this repository
-
-* Within the `player-summary` component found in `frontend/src/app/player-summary/`, create an interface that describes the player summary data returned from the API.
-
-* Feel free to import additional modules of your choice, and design the interface however you wish. Just make sure that the `package.json` and `package-lock.json` are updated accordingly.
-
-* Upon completion of the Frontend Engineering deliverable, please upload to this repo screenshots or screen captures that demonstrate your UI.
+```bash
+backend/
+  ├── app/
+  │   ├── views/               # API views for player summaries
+  │   ├── models/              # Django models for database schema
+  ├── scripts/                 # Data processing and loading scripts
+  ├── requirements.txt         # Backend dependencies
+frontend/
+  ├── src/
+  │   ├── app/
+  │   │   ├── player-summary/   # Player summary component
+  ├── package.json             # Frontend dependencies
 
 
-# Application Setup
-In order to complete the Backend Engineering or Frontend Engineering deliverables, you will need to do all of the following setup items. Please follow the instructions below, from top to bottom sequentially, to ensure that you are set up to run the app. The app is run on an Angular frontend, Django backend, and a PostgreSQL database.
+Installation Instructions
+Backend Setup
+Install PostgreSQL
+Download and install PostgreSQL from PostgreSQL Downloads.
 
-## Set up database
-1. Download and install PostgreSQL from https://www.postgresql.org/download/
-2. Ensure PostgreSQL is running, and in a terminal run
-    ```
-    createuser okcapplicant --createdb;
-    createdb okc;
-    ```
-3. connect to the okc database to grant permissions `psql okc`
-    ```
-    create schema app;
-    alter user okcapplicant with password 'thunder';
-    grant all on schema app to okcapplicant;
-    ```
+Set up Database
+Run the following commands in your terminal to set up the database:
 
+bash
+Copy code
+createuser okcapplicant --createdb;
+createdb okc;
+psql okc
+create schema app;
+alter user okcapplicant with password 'thunder';
+grant all on schema app to okcapplicant;
+Install Python and Dependencies
+You can install Python dependencies using pyenv and virtualenv. Run the following commands:
 
-## Backend
-
-### 1. Install pyenv and virtualenv
-
-Read about pyenv here https://github.com/pyenv/pyenv as well as info on how to install it.
-You may also need to install virtualenv in order to complete step 2.
-
-### 2. Installing Prerequisites
-The steps below attempt to install Python version 3.10.1 within your pyenv environment. If you computer is unable to install this particular version, you can feel free to use a version that works for you, but note that you may also be required to update existing parts of the codebase to make it compatible with your installed version.
-```
-cd root/of/project
+bash
+Copy code
 pyenv install 3.10.1
 pyenv virtualenv 3.10.1 okc
 pyenv local okc
-eval "$(pyenv init -)" (may or may not be necessary)
 pip install -r backend/requirements.txt
-```
+Run Backend
+Start the backend server:
 
-### 3. Starting the Backend
-Start the backend by running the following commands
-```
-cd /path/to/project/backend
+bash
+Copy code
+cd backend
 python manage.py runserver
-```
-The backend should run on http://localhost:8000/.
+The backend server will run on http://localhost:8000/.
 
+Load Data into Database
+Run the data processing script to load the data into PostgreSQL:
 
-## Frontend
+bash
+Copy code
+python backend/scripts/load_data.py
+Frontend Setup
+Install Node.js
+Download and install Node.js (version 16.x.x).
 
-### 1. Installing Prerequisites
-Install Node.js (16.x.x), then run the following commands
-```
-cd /path/to/project/frontend
-# Install Angular-Cli
-npm install -g @angular/cli@12.1.0 typescript@4.6.4 --force
-# Install dependencies
+Install Dependencies
+Navigate to the frontend directory and install dependencies:
+
+bash
+Copy code
+cd frontend
 npm install --force
-```
+Run Frontend
+Start the frontend server:
 
-### 2. Starting the Frontend
-Start the frontend by running the following commands
-```
-cd /path/to/project/frontend
+bash
+Copy code
 npm start
-```
-The frontend should run on http://localhost:4200/. Visit this address to see the app in your browser.
+The frontend server will run on http://localhost:4200/.
 
+Usage
+Visit http://localhost:4200/ to use the application.
+Use the search bar to find players or teams, and the player summary will be displayed with shot visualizations on a court diagram.
+System Design
+Overview
+The autocomplete system is designed to provide fast and efficient search functionality. The backend manages data storage and provides an API for querying player and team data. The frontend handles user input, displaying search suggestions and player summaries. The system is optimized to handle up to 100 concurrent users, ensuring low-latency responses.
 
-# SUBMISSION.md
-Please fill out the SUBMISSION.md file to ensure we have your name attached to the project.
-
-
-# Questions?
-
-Email datasolutions@okcthunder.com
+Key Design Goals:
+Performance: The system is optimized for speed, using a lightweight database and minimal dependencies to ensure quick searches.
+Scalability: The design supports 100 simultaneous users, leveraging efficient data structures and APIs.
+Maintainability: Clear separation between the frontend and backend, making it easier to maintain and extend.
+Technologies Used:
+Frontend: Angular for handling UI interactions and visualization.
+Backend: Django and PostgreSQL for data storage and REST API creation.
+Architectural Flow:
+User Input: Users enter search terms, which are processed by the frontend.
+Autocomplete Request: The frontend sends requests to the backend’s search API for player or team suggestions.
+Database Query: The backend queries the PostgreSQL database to fetch relevant player/team data.
+API Response: The backend returns search results and player summaries via RESTful endpoints.
+UI Rendering: The frontend processes the response, updates the UI, and displays relevant player data and shot visualizations.
+Project Features
+Autocomplete Search: The autocomplete feature helps users quickly find players by fetching matching results as they type.
+Player Summary: Detailed player statistics are fetched and displayed in real-time, including points, rebounds, assists, and more.
+Shot Visualization: Player shot data is plotted on a basketball court diagram, showing whether the shots were made or missed.
+Contributing
+Feel free to open an issue or submit a pull request if you'd like to contribute to the project.
