@@ -1,0 +1,28 @@
+.court-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.court {
+  position: relative;
+  width: 400px;
+  height: 400px; // Make sure it's square
+  background-image: url('/assets/court_diagram.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: 1px solid #000;
+}
+
+.shot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: red;
+  transition: background-color 0.3s;
+}
+
+.shot.made {
+  background-color: green;
+}

@@ -1,0 +1,42 @@
+<div class="autocomplete-container">
+    <input type="text" placeholder="Search for players or teams" (input)="onSearchChange($event)">
+    
+    <ul *ngIf="searchResults && searchResults.players.length">
+      <li *ngFor="let player of searchResults.players" (click)="onPlayerSelect(player)">
+        {{ player.name }}
+      </li>
+    </ul>
+    
+    <ul *ngIf="searchResults && searchResults.teams.length">
+      <li *ngFor="let team of searchResults.teams">
+        {{ team.name }}
+      </li>
+    </ul>
+  </div>
+  
+  <!-- Display selected player's summary -->
+  <div *ngIf="playerSummary">
+    <h2>{{ playerSummary.name }}'s Summary</h2>
+    <p>Minutes Played: {{ playerSummary.minutes }}</p>
+    <p>Points: {{ playerSummary.points }}</p>
+    <p>Assists: {{ playerSummary.assists }}</p>
+    <p>Rebounds (Off/Def): {{ playerSummary.offensiveRebounds }}/{{ playerSummary.defensiveRebounds }}</p>
+    <p>Steals: {{ playerSummary.steals }}</p>
+    <p>Blocks: {{ playerSummary.blocks }}</p>
+    <p>Turnovers: {{ playerSummary.turnovers }}</p>
+  
+    <!-- Shot chart display -->
+    <div class="court-container">
+      <div class="court">
+        <!-- Iterate over shots and position them -->
+        <div 
+          class="shot" 
+          *ngFor="let shot of playerSummary.shots"
+          [class.made]="shot.isMake"
+          [style.left.px]="convertX(shot.locationX)"
+          [style.bottom.px]="convertY(shot.locationY)">
+        </div>
+      </div>
+    </div>
+  </div>
+  
